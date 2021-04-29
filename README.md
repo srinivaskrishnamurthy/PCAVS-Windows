@@ -1,4 +1,4 @@
-# This is a Windows 10 guide to install PC-AVS
+# This is a Windows 10 guide to install & run PC-AVS
 Codes and guides are slightly modified
 
 # Pose-Controllable Talking Face Generation by Implicitly Modularized Audio-Visual Representation (CVPR 2021)
