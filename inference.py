@@ -13,10 +13,10 @@ def video_concat(processed_file_savepath, name, video_names, audio_path):
     cmd = ['ffmpeg']
     num_inputs = len(video_names)
     for video_name in video_names:
-        cmd += ['-i', '\'' + str(os.path.join(processed_file_savepath, video_name + '.mp4'))+'\'',]
+        cmd += ['-i', ' ' + str(os.path.join(processed_file_savepath, video_name + '.mp4'))+' ',]
 
     cmd += ['-filter_complex hstack=inputs=' + str(num_inputs),
-            '\'' + str(os.path.join(processed_file_savepath, name+'.mp4')) + '\'', '-loglevel error -y']
+            ' ' + str(os.path.join(processed_file_savepath, name+'.mp4')) + ' ', '-loglevel error -y']
     cmd = ' '.join(cmd)
     os.system(cmd)
 
@@ -24,20 +24,20 @@ def video_concat(processed_file_savepath, name, video_names, audio_path):
 
 
 def video_add_audio(name, audio_path, processed_file_savepath):
-    os.system('cp {} {}'.format(audio_path, processed_file_savepath))
-    cmd = ['ffmpeg', '-i', '\'' + os.path.join(processed_file_savepath, name + '.mp4') + '\'',
+    os.system('copy {} {}'.format(audio_path, processed_file_savepath))
+    cmd = ['ffmpeg', '-i', ' ' + os.path.join(processed_file_savepath, name + '.mp4') + ' ',
                      '-i', audio_path,
                      '-q:v 0',
                      '-strict -2',
-                     '\'' + os.path.join(processed_file_savepath, 'av' + name + '.mp4') + '\'',
+                     ' ' + os.path.join(processed_file_savepath, 'av' + name + '.mp4') + ' ',
                      '-loglevel error -y']
     cmd = ' '.join(cmd)
     os.system(cmd)
 
 
 def img2video(dst_path, prefix, video_path):
-    cmd = ['ffmpeg', '-i', '\'' + video_path + '/' + prefix + '%d.jpg'
-           + '\'', '-q:v 0', '\'' + dst_path + '/' + prefix + '.mp4' + '\'', '-loglevel error -y']
+    cmd = ['ffmpeg', '-i', ' ' + video_path + '/' + prefix + '%d.jpg'
+           + ' ', '-q:v 0', ' ' + dst_path + '/' + prefix + '.mp4' + ' ', '-loglevel error -y']
     cmd = ' '.join(cmd)
     os.system(cmd)
 
