@@ -33,6 +33,7 @@ conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10
 pip install -r requirements.txt
 pip install lws
 conda install -c menpo ffmpeg
+pip install face-alignment
 ```
 
 * Download the pre-trained [checkpoints](https://drive.google.com/file/d/1Zehr3JLIpzdg2S5zZrhIbpYPKF-4gKU_/view?usp=sharing).
@@ -62,9 +63,9 @@ Example combos to run this AI:
 | description | combo |
 | :-: | :-: |
 |make 1 video talk, with head movements and extra mouth reference|Input: x.mp4<br>Audio Source: y.mp4<br>Pose Source: z.mp4|
-|make 1 image talk, with head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: z.mp4|
-|make 1 image talk, no head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: Image.jpg|
-|make 1 image talk, no head movements|Input: Image.jpg<br>Audio Source: y.mp3<br>Pose Source: Image.jpg|
+|make 1 image talk, with head movements and extra mouth reference|Input: x.jpg<br>Audio Source: y.mp4<br>Pose Source: z.mp4|
+|make 1 image talk, no head movements and extra mouth reference|Input: x.jpg<br>Audio Source: y.mp4<br>Pose Source: x.jpg|
+|make 1 image talk, no head movements|Input: x.jpg<br>Audio Source: y.mp3<br>Pose Source: x.jpg|
 
 **If the Audio Source is `mp4`, Extract the `mp3` out of the `mp4`.** So you have 2 files.
 
@@ -164,66 +165,19 @@ ffmpeg -i misc/Pose_Source/z_aligned_stabled.mp4 -vf fps=30 misc/Pose_Source/z_a
 
 | description | combo | demo.csv |
 | :-: | :-: | :-: |
-|make 1 video talk, with head movements and extra mouth reference|Input: x.mp4<br>Audio Source: y.mp4<br>Pose Source: z.mp4|`misc/Input/y_cropped _y_NUMBER_OF_FRAMES_HERE_ misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
-|make 1 image talk, with head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: z.mp4|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
-|make 1 image talk, no head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: Image.jpg|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
-|make 1 image talk, no head movements|Input: Image.jpg<br>Audio Source: y.mp3<br>Pose Source: Image.jpg|`misc/Input/y_cropped 1 misc/Input/y_cropped 1 misc/Audio_Source/x.mp3 None 0 dummy`|
+|make 1 video talk, with head movements and extra mouth reference|**Input:** x.mp4<br>**Audio Source:** y.mp4<br>**Pose Source:** z.mp4|`misc/Input/y_cropped _y_NUMBER_OF_FRAMES_HERE_ misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, with head movements and extra mouth reference|**Input:** x.jpg<br>**Audio Source:** y.mp4<br>**Pose Source:** z.mp4|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, no head movements and extra mouth reference|**Input:** x.jpg<br>**Audio Source:** y.mp4<br>**Pose Source:** x.jpg|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, no head movements|**Input:** x.jpg<br>**Audio Source:** y.mp3<br>**Pose Source:** x.jpg|`misc/Input/y_cropped 1 misc/Input/y_cropped 1 misc/Audio_Source/x.mp3 None 0 dummy`|
 
-* ### Automatic VoxCeleb2 Data Formulation
-
-The inference code ```experiments/demo.sh``` refers to ```./misc/demo.csv``` for testing data paths. 
-In linux systems, any applicable ```csv``` file can be created automatically by running:
-
-```bash
-python scripts/prepare_testing_files.py
+### Run
+After demo.csv is done setting up, run the codes with this line of command:
 ```
-
-Then modify the ```meta_path_vox``` in ```experiments/demo_vox.sh``` to ```'./misc/demo2.csv'``` and run
-
-``` bash
-bash experiments/demo_vox.sh
+python inference.py --name demo --meta_path_vox misc/demo.csv --netG modulate --netA resseaudio --netA_sync ressesync --netD multiscale --netV resnext --netE fan --model av --gpu_ids 0 --clip_len 1 --batchSize 16 --style_dim 2560 --nThreads 4 --input_id_feature --generate_interval 1 --style_feature_loss --use_audio 1 --noise_pose --gen_video --driving_pose --generate_from_audio_only
 ```
-An additional result should be seen saved. 
+The results will be in the results folder. 
 
-* ### Metadata Details
 
-Detailedly, in ```scripts/prepare_testing_files.py``` there are certain flags which enjoy great flexibility when formulating the metadata:
-
-1. ```--src_pose_path``` denotes the driving pose source path.
-It can be an ```mp4``` file or a folder containing frames in the form of ```%06d.jpg``` starting from  0.
-
-2. ```--src_audio_path``` denotes the audio source's path. 
-It can be an ```mp3``` audio file or an ```mp4``` video file. If a video is given, 
-the frames will be automatically saved in ```./misc/Mouth_Source/video_name```, and disables the ```--src_mouth_frame_path``` flag.
-
-3. ```--src_mouth_frame_path```. When ```--src_audio_path``` is not a video path, 
-this flags could provide the folder containing the video frames synced with the source audio.
-
-4. ```--src_input_path``` is the path to the input reference image. When the path is  a video file, we will convert it to frames.
-
-5. ```--csv_path``` the path to the to-be-saved metadata.
-
-You can manually modify the metadata ```csv``` file or add lines to it according to the rules defined in the ```scripts/prepare_testing_files.py``` file or the dataloader ```data/voxtest_dataset.py```.
-
-We provide a number of demo choices in the ```misc``` folder, including several ones used in our [video](https://www.youtube.com/watch?v=lNQQHIggnUg).
-Feel free to rearrange them even across folders. And you are welcome to record audio files by yourself.
-
-* ### Self-Prepared Data Processing
-Our model handles only **VoxCeleb2-like** cropped data, thus pre-processing is needed for self-prepared data.
-
-To process self-prepared data [face-alignment](https://github.com/1adrianb/face-alignment) is needed. It can be installed by running
-```
-pip install face-alignment
-```
-
-Assuming that a video is already processed into a ```[name]``` folder  by previous steps through ```prepare_testing_files.py```, 
-you can run 
-```
-python scripts/align_68.py --folder_path [name]
-```
-
-The cropped images will be saved at an additional ```[name_cropped]``` folder.
-Then you can manually change the ```demo.csv``` file or alter the directory folder path and run the preprocessing file again.
 
 ## Train Your Own Model
 * Coming soon
