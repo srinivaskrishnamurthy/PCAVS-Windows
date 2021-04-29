@@ -1,3 +1,6 @@
+# This is a Windows 10 guide to install PC-AVS
+Codes and guides are slightly modified
+
 # Pose-Controllable Talking Face Generation by Implicitly Modularized Audio-Visual Representation (CVPR 2021)
 
 [Hang Zhou](https://hangz-nju-cuhk.github.io/), Yasheng Sun, [Wayne Wu](https://wywu.github.io/), [Chen Change Loy](http://personal.ie.cuhk.edu.hk/~ccloy/), [Xiaogang Wang](http://www.ee.cuhk.edu.hk/~xgwang/), and [Ziwei Liu](https://liuziwei7.github.io/).
@@ -16,14 +19,22 @@ In this way, audio-visual representations are modularized into spaces of three k
 <img src='./misc/method.png' width=800>
 
 ## Requirements
-* Python 3.6 and [Pytorch](https://pytorch.org/) 1.3.0 are used. Basic requirements are listed in the 'requirements.txt'.
-
-```
-pip install -r requirements.txt
-```
+Anaconda3 Prompt is used
 
 
 ## Quick Start: Generate Demo Results
+Clone the repository
+Run anaconda3 prompt and run each of these commands to setup the environment
+```
+cd *Path_To_PCAVS*
+conda create -n PCAVS python=3.6
+conda activate PCAVS
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.2 -c pytorch
+pip install -r requirements.txt
+pip install lws
+conda install -c menpo ffmpeg
+```
+
 * Download the pre-trained [checkpoints](https://drive.google.com/file/d/1Zehr3JLIpzdg2S5zZrhIbpYPKF-4gKU_/view?usp=sharing).
 
 * Create the default folder ```./checkpoints``` and 
@@ -31,23 +42,35 @@ unzip the ```demo.zip``` at ```./checkpoints/demo```. There should be 5 ```pth``
 
 * Unzip all ```*.zip``` files within the ```misc``` folder.
 
-* Run the demo scripts:
-``` bash
-bash experiments/demo_vox.sh
+* Run the demo:
+``` 
+python inference.py --name demo --meta_path_vox misc/demo.csv --dataset_mode voxtest --netG modulate --netA resseaudio --netA_sync ressesync --netD multiscale --netV resnext --netE fan --model av --gpu_ids 0 --clip_len 1 --batchSize 16 --style_dim 2560 --nThreads 4 --input_id_feature --generate_interval 1 --style_feature_loss --use_audio 1 --noise_pose --driving_pose --gen_video --generate_from_audio_only
 ```
-
-
-* The ```--gen_video``` argument is by default on, 
-[ffmpeg](https://www.ffmpeg.org/) >= 4.0.0 is required to use this flag in linux systems. 
-All frames along with an ```avconcat.mp4``` video file will be saved in the ```./id_517600055_pose_517600078_audio_681600002/results``` folder.
-
 
 <img src='./misc/output.gif' width=400>
 
 From left to right are the *reference input*, the *generated results*,
 the *pose source video* and the *synced original video* with the driving audio.
 
-## Prepare Testing Meta Data
+## Prepare Testing Your Own Images/Videos
+
+Check out this tutorial video for a clear demonstration
+
+All of these steps can be done with the `prepare_testing_files.py`. However, the codes can't consistently run on Windows, so I suggest manually setting up. Hence, all below steps are manual setups. Please refer to the original branch for running the script `prepare_testing_files.py` if you want to do that instead. 
+
+Example combos to run this AI:
+| name | combo |
+| :-: | :-: |
+|make 1 video talk, with head movements and extra mouth reference|Input: x.mp4<br>Audio Source: y.mp4<br>Pose Source: z.mp4|
+|make 1 image talk, with head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: x.mp4<br>Pose Source: y.mp4|
+|make 1 image talk, no head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: x.mp4<br>Pose Source: Image.jpg|
+|make 1 image talk, no head movements|Input: Image.jpg<br>Audio Source: x.mp3<br>Pose Source: Image.jpg|
+
+* Drag and drop your mp3 file at `misc/Audio_Source` 
+
+* Drag and drop your input image/video in `misc/Input`
+
+* Drag and drop your mouth movements of the mp3 (if its originally a mp4) in `misc/Mouth_Source`
 
 * ### Automatic VoxCeleb2 Data Formulation
 
