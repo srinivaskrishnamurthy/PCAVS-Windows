@@ -59,18 +59,115 @@ Check out this tutorial video for a clear demonstration
 All of these steps can be done with the `prepare_testing_files.py`. However, the codes can't consistently run on Windows, so I suggest manually setting up. Hence, all below steps are manual setups. Please refer to the original branch for running the script `prepare_testing_files.py` if you want to do that instead. 
 
 Example combos to run this AI:
-| name | combo |
+| description | combo |
 | :-: | :-: |
 |make 1 video talk, with head movements and extra mouth reference|Input: x.mp4<br>Audio Source: y.mp4<br>Pose Source: z.mp4|
-|make 1 image talk, with head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: x.mp4<br>Pose Source: y.mp4|
-|make 1 image talk, no head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: x.mp4<br>Pose Source: Image.jpg|
-|make 1 image talk, no head movements|Input: Image.jpg<br>Audio Source: x.mp3<br>Pose Source: Image.jpg|
+|make 1 image talk, with head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: z.mp4|
+|make 1 image talk, no head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: Image.jpg|
+|make 1 image talk, no head movements|Input: Image.jpg<br>Audio Source: y.mp3<br>Pose Source: Image.jpg|
 
-* Drag and drop your mp3 file at `misc/Audio_Source` 
+**If the Audio Source is `mp4`, Extract the `mp3` out of the `mp4`.** So you have 2 files.
 
-* Drag and drop your input image/video in `misc/Input`
+All the following steps assume all mp4s are in 30 fps.
 
-* Drag and drop your mouth movements of the mp3 (if its originally a mp4) in `misc/Mouth_Source`
+### Step up Audio_Source
+
+* Drag and drop your mp3 at `misc/Audio_Source`
+<br />
+
+### Step up Mouth_Source **Skip this step if your Audio Source is a mp3**
+
+* Drag and drop your mp4 at `misc/Mouth_Source` IF Audio Source was a `mp4`, and create a folder at `misc/Mouth_Source` with the name of your mp4 file
+* Change the `x` (2 occurences) to your mp4's name in the command below, and enter it
+```
+ffmpeg -i misc/Mouth_Source/x.mp4 -vf fps=30 misc/Mouth_Source/x/%06d.jpg
+```
+<br />
+
+### Step up Input
+
+* Drag and drop your input image/video in `misc/Input`, and create a folder at `misc/Input` with the name of your mp4/jpg file
+* **If your input is a video**, change the `y` (2 occurences) to your mp4's name in the command below, and enter it
+```
+ffmpeg -i misc/Input/y.mp4 -vf fps=30 misc/Input/y/%06d.jpg
+```
+* **If your input is an image**, drag and drop the image inside the folder. Rename the image to `000000.jpg`
+<br />
+
+### Step up Pose_Source
+
+* Drag and drop your pose image/video `misc/Pose_Source`, and create a folder at `misc/Pose_Source` with the name of your mp4/jpg file
+* **If your input is a video**, change the `z` (2 occurences) to your mp4's name in the command below, and enter it
+```
+ffmpeg -i misc/Pose_Source/z.mp4 -vf fps=30 misc/Pose_Source/z/%06d.jpg
+```
+* **If your input is an image**, drag and drop the image inside the folder. Rename the image to `000000.jpg`
+<br />
+
+
+### Align Frames
+After the drag and drop steps, run each of these commands (replace the `x`, `y`, `z` to the right names)
+```
+python scripts/align_68.py --folder_path misc/Mouth_Source/x
+python scripts/align_68.py --folder_path misc/Input/y
+python scripts/align_68.py --folder_path misc/Pose_Source/z
+```
+If you get the error `preprocessing failed`, it means some of the frames can't detect faces. One way to fix it is to shorten the video where the faces are visible.
+
+New folders called `x_cropped`, `y_cropped`, `z_cropped` will be created.
+
+<br />
+
+### Conditional: Stablize aligned videos
+If your aligned faces are really shaky when put back into a video, you can stablize the aligned faces by putting the frames together with
+
+Mouth_Source (replace the `x` with the corresponding name)
+```
+ffmpeg -i misc/Mouth_Source/x_cropped/%06d.jpg -vf fps=30 misc/Mouth_Source/x_aligned_stabled.mp4
+```
+
+Input (replace the `y` with the corresponding name)
+```
+ffmpeg -i misc/Input/y_cropped/%06d.jpg -vf fps=30 misc/Input/y_aligned_stabled.mp4
+```
+
+Pose_Source (replace the `z` with the corresponding name)
+```
+ffmpeg -i misc/Pose_Source/z_cropped/%06d.jpg -vf fps=30 misc/Pose_Source/z_aligned_stabled.mp4
+```
+
+Stablizes the videos with [this](https://www.stabilizo.com/)
+
+After stablizing them, replace the corresponding mp4s. (eg. replace `z_aligned_stabled.mp4` with the actual stablized mp4)
+
+Mouth_Source
+```
+ffmpeg -i misc/Mouth_Source/x_aligned_stabled.mp4 -vf fps=30 misc/Mouth_Source/x_aligned_stabled/%06d.jpg
+```
+
+Input
+```
+ffmpeg -i misc/Input/y_aligned_stabled.mp4 -vf fps=30 misc/Input/y_aligned_stabled/%06d.jpg
+```
+
+Pose_Source
+```
+ffmpeg -i misc/Pose_Source/z_aligned_stabled.mp4 -vf fps=30 misc/Pose_Source/z_aligned_stabled/%06d.jpg
+```
+<br />
+
+### Setup demo.csv
+
+* open the file demo.csv with notepad
+* Count the amount of frames in each `x_cropped`, `y_cropped`, `z_cropped` folder
+* Change the content accordingly:
+
+| description | combo | demo.csv |
+| :-: | :-: | :-: |
+|make 1 video talk, with head movements and extra mouth reference|Input: x.mp4<br>Audio Source: y.mp4<br>Pose Source: z.mp4|`misc/Input/y_cropped _y_NUMBER_OF_FRAMES_HERE_ misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, with head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: z.mp4|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, no head movements and extra mouth reference|Input: Image.jpg<br>Audio Source: y.mp4<br>Pose Source: Image.jpg|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, no head movements|Input: Image.jpg<br>Audio Source: y.mp3<br>Pose Source: Image.jpg|`misc/Input/y_cropped 1 misc/Input/y_cropped 1 misc/Audio_Source/x.mp3 None 0 dummy`|
 
 * ### Automatic VoxCeleb2 Data Formulation
 
