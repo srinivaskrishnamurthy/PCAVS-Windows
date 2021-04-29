@@ -83,7 +83,7 @@ def align_folder(folder_path, folder_save_path):
         M_i[:, 2] = M[:, 2] + bias
         img = cv2.imread(img_pth)
         wrapped = affine_align_img(img, M_i)
-        img_save_path = os.path.join(folder_save_path, img_pth.split('/')[-1])
+        img_save_path = os.path.join(folder_save_path, img_pth.split('\\')[-1])
         cv2.imwrite(img_save_path, wrapped)
     print('cropped files saved at {}'.format(folder_save_path))
 
@@ -94,8 +94,8 @@ def main():
     args = parser.parse_args()
 
     if os.path.isdir(args.folder_path):
-        home_path = '/'.join(args.folder_path.split('/')[:-1])
-        save_img_path = os.path.join(home_path, args.folder_path.split('/')[-1] + '_cropped')
+        home_path = '/'.join(args.folder_path.split('\\')[:-1])
+        save_img_path = os.path.join(home_path, args.folder_path.split('\\')[-1] + '_cropped')
         os.makedirs(save_img_path, exist_ok=True)
 
         align_folder(args.folder_path, save_img_path)
