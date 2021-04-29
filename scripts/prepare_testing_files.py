@@ -14,15 +14,17 @@ def mkdir(path):
 
 
 def proc_frames(src_path, dst_path):
-    cmd = 'ffmpeg -i \"{}\" -start_number 0 -qscale:v 2 \"{}\"/%06d.jpg -loglevel error -y'.format(src_path, dst_path)
+    # cmd = 'ffmpeg -i \"{}\" -start_number 0 -qscale:v 2 \"{}\"/%06d.jpg -loglevel error -y'.format(src_path, dst_path)
+    cmd = f'ffmpeg -i {src_path} -start_number 0 -qscale:v 2 {dst_path}/%06d.jpg -loglevel error -y'
     os.system(cmd)
     frames = glob.glob(os.path.join(dst_path, '*.jpg'))
     return len(frames)
 
 
 def proc_audio(src_mouth_path, dst_audio_path):
-    audio_command = 'ffmpeg -i \"{}\" -loglevel error -y -f wav -acodec pcm_s16le ' \
-                    '-ar 16000 \"{}\"'.format(src_mouth_path, dst_audio_path)
+    # audio_command = 'ffmpeg -i \"{}\" -loglevel error -y -f wav -acodec pcm_s16le ' \
+    #                 '-ar 16000 \"{}\"'.format(src_mouth_path, dst_audio_path)
+    audio_command = f'ffmpeg -i {src_mouth_path} -loglevel error -y -f wav -acodec pcm_s16le -ar 16000 {dst_audio_path}'
     os.system(audio_command)
 
 
@@ -60,7 +62,7 @@ if __name__ == "__main__":
     elif os.path.isdir(args.src_input_path):
         dst_input_path = args.src_input_path
     else:
-        os.system('cp {} {}'.format(args.src_input_path, os.path.join(dst_input_path, args.src_input_path.split('/')[-1])))
+        os.system('copy {} {}'.format(args.src_input_path, os.path.join(dst_input_path, args.src_input_path.split('/')[-1])))
 
 
     # ===================== process audio =======================================================
@@ -71,7 +73,7 @@ if __name__ == "__main__":
     dst_audio_path = os.path.join(audio_source_save_path, audio_name + '.mp3')
 
     if args.src_audio_path.split('/')[-1].split('.')[-1] == 'mp3':
-        os.system('cp {} {}'.format(args.src_audio_path, dst_audio_path))
+        os.system('copy {} {}'.format(args.src_audio_path, dst_audio_path))
         if args.src_mouth_frame_path and os.path.isdir(args.src_mouth_frame_path):
             dst_mouth_frame_path = args.src_mouth_frame_path
             num_mouth_frames = len(glob.glob(os.path.join(args.src_mouth_frame_path, '*.jpg')) + glob.glob(os.path.join(args.src_mouth_frame_path, '*.png')))
