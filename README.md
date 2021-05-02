@@ -169,10 +169,10 @@ ffmpeg -i misc/Pose_Source/z_aligned_stabled.mp4 -vf fps=30 misc/Pose_Source/z_a
 
 | description | &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; combo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| demo.csv |
 | :-: | :-: | :-: |
-|make 1 video talk, with head movements and extra mouth reference|**Input:** x.mp4<br>**Audio Source:** y.mp4<br>**Pose Source:** z.mp4|`misc/Input/y_cropped _y_NUMBER_OF_FRAMES_HERE_ misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
-|make 1 image talk, with head movements and extra mouth reference|**Input:** x.jpg<br>**Audio Source:** y.mp4<br>**Pose Source:** z.mp4|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
-|make 1 image talk, no head movements and extra mouth reference|**Input:** x.jpg<br>**Audio Source:** y.mp4<br>**Pose Source:** x.jpg|`misc/Input/y_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/x.mp3 misc/Mouth_Source/x_cropped _x_NUMBER_OF_FRAMES_HERE_ dummy`|
-|make 1 image talk, no head movements|**Input:** x.jpg<br>**Audio Source:** y.mp3<br>**Pose Source:** x.jpg|`misc/Input/y_cropped 1 misc/Input/y_cropped 1 misc/Audio_Source/x.mp3 None 0 dummy`|
+|make 1 video talk, with head movements and extra mouth reference|**Input:** x.mp4<br>**Audio Source:** y.mp4<br>**Pose Source:** z.mp4|`misc/Input/x_cropped _x_NUMBER_OF_FRAMES_HERE_ misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/y.mp3 misc/Mouth_Source/y_cropped _y_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, with head movements and extra mouth reference|**Input:** x.jpg<br>**Audio Source:** y.mp4<br>**Pose Source:** z.mp4|`misc/Input/x_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/y.mp3 misc/Mouth_Source/y_cropped _y_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, no head movements and extra mouth reference|**Input:** x.jpg<br>**Audio Source:** y.mp4<br>**Pose Source:** x.jpg|`misc/Input/x_cropped 1 misc/Pose_Source/z_cropped _z_NUMBER_OF_FRAMES_HERE_ misc/Audio_Source/y.mp3 misc/Mouth_Source/y_cropped _y_NUMBER_OF_FRAMES_HERE_ dummy`|
+|make 1 image talk, no head movements|**Input:** x.jpg<br>**Audio Source:** y.mp3<br>**Pose Source:** x.jpg|`misc/Input/x_cropped 1 misc/Input/x_cropped 1 misc/Audio_Source/y.mp3 None 0 dummy`|
 
 ### Run
 After demo.csv is done setting up, run the codes with this line of command:
