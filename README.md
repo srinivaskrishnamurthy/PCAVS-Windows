@@ -182,10 +182,6 @@ python inference.py --name demo --meta_path_vox misc/demo.csv --netG modulate --
 The results will be in the results folder. 
 
 
-
-## Train Your Own Model
-* Coming soon
-
 ## License and Citation
 
 The usage of this software is under [CC-BY-4.0](https://github.com/Hangz-nju-cuhk/Talking-Face_PC-AVS/LICENSE).
