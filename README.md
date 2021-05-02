@@ -30,6 +30,9 @@ cd *Path_To_PCAVS*
 conda create -n PCAVS python=3.6
 conda activate PCAVS
 conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.2 -c pytorch
+## or for NVIDIA 30 series 
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11.0 -c pytorch
+
 pip install -r requirements.txt
 pip install lws
 conda install -c menpo ffmpeg
