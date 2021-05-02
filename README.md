@@ -21,6 +21,7 @@ In this way, audio-visual representations are modularized into spaces of three k
 ## Requirements
 Anaconda3 Prompt is used
 
+You can get it [here](https://www.anaconda.com/products/individual)
 
 ## Quick Start: Generate Demo Results
 Clone the repository
