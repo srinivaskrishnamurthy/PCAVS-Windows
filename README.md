@@ -36,7 +36,7 @@ conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11
 
 pip install -r requirements.txt
 pip install lws
-conda install -c menpo ffmpeg
+conda install -c conda-forge ffmpeg
 pip install face-alignment
 ```
 
