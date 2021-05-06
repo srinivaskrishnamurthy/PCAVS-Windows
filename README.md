@@ -1,6 +1,8 @@
 # This is a Windows 10 guide to install & run PC-AVS
 Codes and guides are slightly modified
 
+[Installation Tutorial](https://youtu.be/4O3EqIiEzKQ)
+
 # Pose-Controllable Talking Face Generation by Implicitly Modularized Audio-Visual Representation (CVPR 2021)
 
 [Hang Zhou](https://hangz-nju-cuhk.github.io/), Yasheng Sun, [Wayne Wu](https://wywu.github.io/), [Chen Change Loy](http://personal.ie.cuhk.edu.hk/~ccloy/), [Xiaogang Wang](http://www.ee.cuhk.edu.hk/~xgwang/), and [Ziwei Liu](https://liuziwei7.github.io/).
