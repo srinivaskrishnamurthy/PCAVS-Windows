@@ -77,12 +77,12 @@ Example combos to run this AI:
 
 All the following steps assume all mp4s are in 30 fps.
 
-### Step up Audio_Source
+### Setup Audio_Source
 
 * Drag and drop your mp3 at `misc/Audio_Source`
 <br />
 
-### Step up Mouth_Source **Skip this step if your Audio Source is a mp3**
+### Setup Mouth_Source **Skip this step if your Audio Source is a mp3**
 
 * Drag and drop your mp4 at `misc/Mouth_Source` IF Audio Source was a `mp4`, and create a folder at `misc/Mouth_Source` with the name of your mp4 file
 * Change the `x` (2 occurences) to your mp4's name in the command below, and enter it
@@ -91,7 +91,7 @@ ffmpeg -i misc/Mouth_Source/x.mp4 -vf fps=30 misc/Mouth_Source/x/%06d.jpg
 ```
 <br />
 
-### Step up Input
+### Setup Input
 
 * Drag and drop your input image/video in `misc/Input`, and create a folder at `misc/Input` with the name of your mp4/jpg file
 * **If your input is a video**, change the `y` (2 occurences) to your mp4's name in the command below, and enter it
@@ -101,7 +101,7 @@ ffmpeg -i misc/Input/y.mp4 -vf fps=30 misc/Input/y/%06d.jpg
 * **If your input is an image**, drag and drop the image inside the folder. Rename the image to `000000.jpg`
 <br />
 
-### Step up Pose_Source
+### Setup Pose_Source
 
 * Drag and drop your pose image/video `misc/Pose_Source`, and create a folder at `misc/Pose_Source` with the name of your mp4/jpg file
 * **If your input is a video**, change the `z` (2 occurences) to your mp4's name in the command below, and enter it
