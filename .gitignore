@@ -119,3 +119,5 @@ work_dirs/
 # Pytorch
 *.pth
 *.tar
+/1.9.4
+/2021.1.1

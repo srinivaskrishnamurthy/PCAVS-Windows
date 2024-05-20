@@ -1,0 +1,10 @@
+dominate
+dill
+scikit-image
+numpy
+scipy
+matplotlib
+opencv-python
+tensorboard
+tqdm
+librosa

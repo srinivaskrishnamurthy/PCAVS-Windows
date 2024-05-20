@@ -146,7 +146,7 @@ class AudioConfig:
 
     def _build_mel_basis(self):
         assert self.fmax <= self.sample_rate // 2
-        return librosa.filters.mel(self.sample_rate, self.fft_size,
+        return librosa.filters.mel(sr=self.sample_rate, n_fft=self.fft_size,
                                    fmin=self.fmin, fmax=self.fmax,
                                    n_mels=self.num_mels)
 
