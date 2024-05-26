@@ -32,8 +32,10 @@ Run anaconda3 prompt and run each of these commands to set up the environment
 
 3. conda activate PCAVS38
 
-# I have Nvidia RTX 4070 GPU
+# If you have Nvidia RTX 4070 GPU
 4. conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+#OR for CPU 
+4. conda install pytorch torchvision torchaudio cpuonly -c pytorch
 
 5.1 pip install pip-tools
 5.2. I renamed the original rwquirements.txt to requirements_old.txt.
